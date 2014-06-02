@@ -1,24 +1,43 @@
-# set path to app that will be used to configure unicorn,
-# note the trailing slash in this example
-@dir = "/Users/kazu634/works/sinatra_test/"
+if ENV['RACK_ENV'] == "production"
+  # set path to app that will be used to configure unicorn,
+  # note the trailing slash in this example
+  @dir = "/var/lib/webapp/apps/gcal2dailyplanner/"
 
+  # Specify path to socket unicorn listens to,
+  # we will use this in our nginx.conf later
+  listen "/tmp/unicorn.sock", :backlog => 64
+
+  # store the pid file under /var/run directory
+  pid "/tmp/unicorn.pid"
+else
+  # set path to app that will be used to configure unicorn,
+  # note the trailing slash in this example
+  @dir = "/Users/kazu634/works/sinatra_test/"
+
+  # Specify the port number.
+  listen 3000
+
+  # store the pid file under /var/run directory
+  pid "#{@dir}unicorn.pid"
+end
+
+# number of worker processes:
 worker_processes 2
+
+# working directory:
 working_directory @dir
 
+# timeout:
 timeout 30
 
-# Specify path to socket unicorn listens to,
-# we will use this in our nginx.conf later
-#listen "#{@dir}tmp/sockets/unicorn.sock", :backlog => 64
-listen 3000
+# log files:
+if ENV['RACK_ENV'] == "production"
+  # Set log file paths
+  stderr_path "#{@dir}log/unicorn.stderr.log"
+  stdout_path "#{@dir}log/unicorn.stdout.log"
+end
 
-# Set process id path
-pid "#{@dir}tmp/pids/unicorn.pid"
-
-# Set log file paths
-#stderr_path "#{@dir}log/unicorn.stderr.log"
-#stdout_path "#{@dir}log/unicorn.stdout.log"
-
+# preload_app:
 preload_app true
 GC.respond_to?(:copy_on_write_friendly=) and
     GC.copy_on_write_friendly = true
