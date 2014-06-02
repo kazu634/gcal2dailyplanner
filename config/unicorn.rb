@@ -1,4 +1,8 @@
 if ENV['RACK_ENV'] == "production"
+  # set path to app that will be used to configure unicorn,
+  # note the trailing slash in this example
+  @dir = "/var/lib/webapp/apps/gcal2dailyplanner/"
+
   # Specify path to socket unicorn listens to,
   # we will use this in our nginx.conf later
   listen "/tmp/unicorn.sock", :backlog => 64
