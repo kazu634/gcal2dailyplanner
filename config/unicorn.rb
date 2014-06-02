@@ -33,8 +33,8 @@ timeout 30
 # log files:
 if ENV['RACK_ENV'] == "production"
   # Set log file paths
-  stderr_path "#{@dir}log/unicorn.stderr.log"
-  stdout_path "#{@dir}log/unicorn.stdout.log"
+  stderr_path "/var/log/gcalendar/unicorn.stderr.log"
+  stdout_path "/var/log/gcalendar/unicorn.stdout.log"
 end
 
 # preload_app:
